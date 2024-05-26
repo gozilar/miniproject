@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.125);
+        }
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+            text-align: left;
+        }
+        th {
+            background-color: rgba(0, 0, 0, 0.03);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+        }
+        tr:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body>
+    <h1>Shopping Cart</h1>
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th>ID</th>
+                <th>Product Name</th>
+                <th>Price</th>
+                <th>Amount</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+			<%let sum = 0%>
+			<% cart.forEach(item=> {%>
+                <tr>
+                    <td><%=item.id%></td>
+                    <td><%=item.name%></td>
+                    <td><%=item.price%></td>
+                    <td><%=item.amount%></td>
+                    <td><%=(+item.price * +item.amount)%></td>
+					<%sum += (+item.price * +item.amount)%>
+                </tr>
+            <% }); %>
+            <tr>
+                <td colspan="4" style="text-align: right;"><strong>Grand Total:<%=sum%></strong></td>
+                <td><strong></strong></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

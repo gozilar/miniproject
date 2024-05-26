@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <style>
+        /* Greyscale theme */
+        body {
+            background-color: #f8f9fa;
+            color: #343a40;
+        }
+        .navbar {
+            background-color: #343a40;
+            color: #fff;
+        }
+        .navbar-brand {
+            color: #fff;
+        }
+        .card {
+            background-color: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.125);
+        }
+        .card-header {
+            background-color: rgba(0, 0, 0, 0.03);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+        }
+		#productFormWrapper {
+            background-color: #e9ecef; /* Background color for the form wrapper */
+            border: 1px solid #ced4da; /* Border color */
+            padding: 20px; /* Padding */
+            margin-top: 20px; /* Margin top */
+        }
+        #productForm {
+            margin: 0; /* Reset margin */
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.css" />
+    <script src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
+    <script>
+        $(document).ready(function() {
+
+            $('#productsTable').DataTable( {
+                ajax: {
+                    url: '/api/products',
+                    dataSrc: ''
+                },
+                "columns": [
+                    { "data": "id" },
+                    { "data": "name" },
+                    { "data": "price" },
+                    { "data": "stock" }, // Add stock column
+                    {
+                        "data": null,
+                        "render": function(data, type, row) {
+                            return '<button onclick="deleteProduct(' + row.id + ')">Delete</button>';
+                        }
+                    } // Add delete button column
+                ],
+                "columnDefs": [
+                    { "className": "dt-center", "targets": "_all" } // Center all column data
+                ]
+            });
+
+        });
+
+        function deleteProduct(productId) {
+            // Send request to delete product with productId
+            $.ajax({
+                url: '/api/products/' + productId,
+                type: 'DELETE',
+                success: function(result) {
+                    // Reload the table or update UI as needed
+                    $('#productsTable').DataTable().ajax.reload();
+                },
+                error: function(error) {
+                    // Handle error
+                    console.error('Error deleting product:', error);
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">Admin Dashboard</a>
+    </div>
+</nav>
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h3>Products Stocks</h3>
+        </div>
+        <div class="card-body">
+            <table id="productsTable" class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Action</th> <!-- Add action column -->
+                    <!-- Add more columns if needed -->
+                </tr>
+                </thead>
+                <tbody>
+                <!-- DataTables will populate this tbody with data -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+	
+	
+	   <div id="productFormWrapper">
+	   <h2>Add a new product</h2>
+        <form id="productForm" action="/api/products" method="post">
+            <label for="id">ID:</label>
+            <input type="text" id="id" name="id"><br><br>
+
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name"><br><br>
+
+            <label for="price">Price:</label>
+            <input type="number" id="price" name="price"><br><br>
+
+            <label for="desc">Description:</label><br>
+            <textarea id="desc" name="desc" rows="4" cols="50"></textarea><br><br>
+
+            <label for="imagefile">Image File:</label>
+            <input type="text" id="imagefile" name="imagefile"><br><br>
+
+            <label for="imagefile_big">Big Image File:</label>
+            <input type="text" id="imagefile_big" name="imagefile_big"><br><br>
+
+            <label for="discountprice">Discount Price:</label>
+            <input type="text" id="discountprice" name="discountprice"><br><br>
+
+            <label for="stock">Stock:</label>
+            <input type="number" id="stock" name="stock"><br><br>
+
+            <label for="stars">Stars:</label>
+            <input type="number" id="stars" name="stars"><br><br>
+
+            <button type="submit">Add a product</button>
+        </form>
+    </div>
+	
+	
+</div>
+
+
+
+
+
+</body>
+</html>
